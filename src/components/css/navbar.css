@@ -1,0 +1,13 @@
+/* Navbar */
+
+.navbar .nav li {
+  z-index: 1001;
+}
+
+.nav-item a {
+  border-bottom: 2px solid transparent;
+}
+
+.nav-item a:hover {
+  border-bottom: 2px #fff solid;
+}
