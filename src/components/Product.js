@@ -12,7 +12,6 @@ function Product(props) {
     let oldItems = JSON.parse(localStorage.getItem("cartItems")) || [];
 
     for (let i = 0; i <= oldItems.length; i++) {
-      console.log(oldItems[i]?.name, product.name);
       if (
         oldItems[i]?.name === product?.name &&
         oldItems[i]?.size === product?.size

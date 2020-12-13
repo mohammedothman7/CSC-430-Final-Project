@@ -1,55 +1,51 @@
 import React, { useContext, useEffect, useState } from "react";
-import { auth, db } from "../firebase";
+import { db } from "../firebase";
 
 import { UserContext } from "./UserContext";
 
 function Account() {
-  const [user, setUser] = useContext(UserContext);
+  const [user] = useContext(UserContext);
   const [userData, setUserData] = useState({});
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
+    const getUserData = () => {
+      let email = user?.email;
+
+      let userData = db.collection("users").doc(email);
+      userData
+        .get()
+        .then((doc) => {
+          if (doc.exists) {
+            setUserData(doc.data());
+          } else {
+            console.log("No such document!");
+          }
+        })
+        .catch((error) => console.log(error));
+    };
+
+    const getOrders = () => {
+      let uid = user?.uid;
+
+      if (uid === undefined) return;
+
+      db.collection("orders")
+        .where("userId", "==", uid)
+        .get()
+        .then((doc) => {
+          let orderDetails = [];
+          doc.forEach((order) => {
+            orderDetails.push(order.data());
+          });
+          orderDetails.reverse();
+          setOrders(orderDetails);
+        });
+    };
+
     getUserData();
     getOrders();
   }, [user]);
-
-  const getUserData = () => {
-    let email = user?.email;
-    console.log(email);
-
-    let userData = db.collection("users").doc(email);
-    userData
-      .get()
-      .then((doc) => {
-        if (doc.exists) {
-          console.log("Document data:", doc.data());
-          setUserData(doc.data());
-        } else {
-          console.log("No such document!");
-        }
-      })
-      .catch((error) => console.log(error));
-  };
-
-  const getOrders = () => {
-    let uid = user?.uid;
-
-    if (uid === undefined) return;
-    console.log({ uid });
-
-    const ref = db
-      .collection("orders")
-      .where("userId", "==", uid)
-      .get()
-      .then((doc) => {
-        let orderDetails = [];
-        doc.forEach((order) => {
-          orderDetails.push(order.data());
-        });
-        setOrders(orderDetails);
-      });
-    console.log({ orders });
-  };
 
   return (
     <div>
@@ -93,10 +89,13 @@ function Account() {
               {orders?.map((order) => {
                 return (
                   <div className=" ml-2 mb-5" key={order.purchaseDate}>
-                    <li className="list-group-item  ">
+                    <div className="list-group-item  ">
                       {order?.items?.map((item) => {
                         return (
-                          <div className="row my-4 border-bottom mx-auto">
+                          <div
+                            key={item.purchaseDate}
+                            className="row my-4 border-bottom mx-auto"
+                          >
                             <div className="col col-lg-12">
                               <img
                                 src={`./images/products/${item.image}.jpg`}
@@ -141,7 +140,7 @@ function Account() {
                           </h5>
                         </div>
                       </div>
-                    </li>
+                    </div>
                   </div>
                 );
               })}

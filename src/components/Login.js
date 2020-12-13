@@ -1,20 +1,17 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { auth } from "../firebase";
-import { UserContext } from "./UserContext";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useContext(UserContext);
 
   let history = useHistory();
 
   const handleLogin = async () => {
     await auth
       .signInWithEmailAndPassword(email, password)
-      .then((user) => {
-        setIsLoggedIn(true);
+      .then(() => {
         history.push("/");
       })
       .catch((error) => console.log(error));
