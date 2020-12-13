@@ -23,7 +23,13 @@ function Clothing() {
           <p>Loading...</p>
         ) : (
           clothing.map((item) => {
-            return <Product product={item} key={item.name} />;
+            return (
+              <Product
+                product={item}
+                key={item.name}
+                sizes={["S", "M", "L", "XL"]}
+              />
+            );
           })
         )}
       </div>

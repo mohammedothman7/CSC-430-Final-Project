@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
+import { auth, db } from "../firebase";
+import moment from "moment";
 
 function Checkout() {
   const [subtotal, setSubtotal] = useState(0);
@@ -9,6 +11,20 @@ function Checkout() {
   let history = useHistory();
 
   function placeOrder() {
+    db.collection("orders").add({
+      userId: auth.currentUser.uid,
+      email: auth.currentUser.email,
+      purchaseDate: moment().format("MMM DD YYYY, h:mm:ss a"),
+      items: JSON.parse(localStorage.getItem("cartItems")),
+      subtotal,
+      shipping,
+      tax,
+      orderTotal,
+    });
+
+    localStorage.removeItem("cartItems");
+    localStorage.removeItem("total");
+
     history.push("/");
     alert(
       "Your order has successfully been placed. Thank you for shopping with Sneaker & Apparels Co."

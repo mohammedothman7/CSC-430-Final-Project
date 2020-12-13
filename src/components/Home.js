@@ -1,74 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Carousel } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { db } from "../firebase";
+import Product from "./Product";
 import "./css/home.css";
 
 function Home() {
+  const [items, setItems] = useState([]);
+  useEffect(() => {
+    db.collection("sneakers")
+      .get()
+      .then(function (querySnapshot) {
+        let itemData = [];
+        let count = 1;
+        querySnapshot.forEach(function (doc) {
+          if (count > 3) return;
+          itemData.push(doc.data());
+          count++;
+        });
+
+        setItems(itemData);
+      });
+  }, []);
   return (
     <div>
-      {/* <div
-        id="carouselExampleIndicators"
-        className="carousel slide"
-        data-ride="carousel"
-      >
-        <ol className="carousel-indicators">
-          <li
-            data-target="#carouselExampleIndicators"
-            data-slide-to="0"
-            className="active"
-          ></li>
-          <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-          <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-        </ol>
-        <div className="carousel-inner">
-          <div className="carousel-item active">
-            <img
-              src="../../../images/hero.jpg"
-              className="d-block w-100"
-              alt="..."
-            />
-          </div>
-          <div className="carousel-item">
-            <img
-              src="../../../images/hero-2.jpg"
-              className="d-block w-100"
-              alt="..."
-            />
-          </div>
-          <div className="carousel-item">
-            <img
-              src="../../../images/hero-3.jpg"
-              className="d-block w-100"
-              alt="..."
-            />
-          </div>
-        </div>
-        <a
-          className="carousel-control-prev"
-          href="#carouselExampleIndicators"
-          role="button"
-          data-slide="prev"
-        >
-          <span
-            className="carousel-control-prev-icon"
-            aria-hidden="true"
-          ></span>
-          <span className="sr-only">Previous</span>
-        </a>
-        <a
-          className="carousel-control-next"
-          href="#carouselExampleIndicators"
-          role="button"
-          data-slide="next"
-        >
-          <span
-            className="carousel-control-next-icon"
-            aria-hidden="true"
-          ></span>
-          <span className="sr-only">Next</span>
-        </a>
-      </div> */}
-
       <Carousel>
         <Carousel.Item>
           <img
@@ -93,7 +48,23 @@ function Home() {
         </Carousel.Item>
       </Carousel>
 
-      <div className="d-flex justify-content-center flex-wrap"></div>
+      <div className="container d-flex justify-content-center flex-wrap">
+        {!items ? (
+          <p>Loading...</p>
+        ) : (
+          items.map((item) => {
+            return (
+              <Product
+                product={item}
+                key={item.name}
+                sizes={[7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11]}
+              />
+            );
+          })
+        )}
+      </div>
+
+      {/* <div className="d-flex justify-content-center flex-wrap"></div>
       <h2 className="text-center mt-3">Newest Arrivals</h2>
       <div className="popular-items container d-flex justify-content-center flex-wrap">
         <div className="card mt-4 mx-md-2" style={{ width: "18rem" }}>
@@ -149,7 +120,7 @@ function Home() {
             </button>
           </div>
         </div>
-      </div>
+      </div> */}
 
       <div className="jumbotron jumbotron-fluid mt-4">
         <div className="container d-flex justify-content-center flex-wrap">

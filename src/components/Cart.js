@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { auth } from "../firebase";
 
 function Cart() {
   const [cartItems, setCartItems] = useState([]);
@@ -78,7 +79,8 @@ function Cart() {
                   </div>
                   <div className="col col-lg-2 text-center">
                     <h5 className="mt-4 flex-wrap item-name">{item.name}</h5>
-                    <p>Size: 10.5</p>
+                    {console.log(item.size)}
+                    <p>Size: {item.size}</p>
                     <h2>
                       <span className="badge badge-danger">{item.price}</span>
                     </h2>
@@ -113,6 +115,9 @@ function Cart() {
               type="submit"
               className="btn btn-primary btn-md ml-4"
               value="Check Out"
+              disabled={
+                cartItems?.length > 0 && auth.currentUser ? false : true
+              }
             />
           </Link>
         </div>

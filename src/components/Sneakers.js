@@ -23,7 +23,13 @@ function Sneakers() {
           <p>Loading...</p>
         ) : (
           sneakers.map((sneaker) => {
-            return <Product product={sneaker} key={sneaker.name} />;
+            return (
+              <Product
+                product={sneaker}
+                key={sneaker.name}
+                sizes={[7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11]}
+              />
+            );
           })
         )}
       </div>
