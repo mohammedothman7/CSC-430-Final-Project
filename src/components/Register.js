@@ -10,6 +10,8 @@ function Register() {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+
   const [isLoggedIn, setIsLoggedIn] = useContext(UserContext);
 
   let history = useHistory();
@@ -34,7 +36,7 @@ function Register() {
           });
         history.push("/");
       })
-      .catch((error) => console.error(error));
+      .catch((error) => setError(error));
   };
 
   return (
@@ -82,6 +84,9 @@ function Register() {
                 required
                 onChange={(e) => setPassword(e.target.value)}
               />
+            </div>
+            <div className="col-md-8 mb-3 mx-auto text-danger">
+              {error?.message}
             </div>
 
             <div className="col-md-8 mx-auto mb-3">

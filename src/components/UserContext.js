@@ -8,6 +8,7 @@ export const UserProvider = (props) => {
 
   auth.onAuthStateChanged((user) => {
     if (user) {
+      console.log("Signed in");
       setUserData(user);
     } else {
       setUserData(null);

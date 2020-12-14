@@ -43,7 +43,7 @@ function NavbarView() {
             {isLoggedIn ? (
               <div className="container">
                 <Nav.Link className="text-white mr-4" href="/account">
-                  Hello, {auth.currentUser?.displayName}
+                  Hello, {isLoggedIn.displayName}
                 </Nav.Link>
                 <button
                   style={{ border: "none" }}

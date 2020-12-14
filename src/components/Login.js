@@ -5,6 +5,7 @@ import { auth } from "../firebase";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
 
   let history = useHistory();
 
@@ -14,7 +15,7 @@ function Login() {
       .then(() => {
         history.push("/");
       })
-      .catch((error) => console.log(error));
+      .catch((error) => setError(error));
   };
   return (
     <div>
@@ -40,6 +41,9 @@ function Login() {
               required
               onChange={(e) => setPassword(e.target.value)}
             />
+          </div>
+          <div className="col-md-8 mb-3 mx-auto text-danger">
+            {error?.message}
           </div>
 
           <div className="d-flex justify-content-center align-items-center">

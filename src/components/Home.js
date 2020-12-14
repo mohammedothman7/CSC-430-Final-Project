@@ -18,7 +18,6 @@ function Home() {
           itemData.push(doc.data());
           count++;
         });
-
         setItems(itemData);
       });
   }, []);
